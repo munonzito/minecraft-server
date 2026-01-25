@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  minecraft:
+    build: .
+    container_name: minecraft-server
+    ports:
+      - "25565:25565"
+    environment:
+      - XMX=4G
+      - XMS=4G
+      - PAPER_VERSION=1.21
+    volumes:
+      - ./world:/minecraft/world
+      - ./world_nether:/minecraft/world_nether
+      - ./world_the_end:/minecraft/world_the_end
+      - ./plugins:/minecraft/plugins
+      - ./server.properties:/minecraft/server.properties
+      - ./bukkit.yml:/minecraft/bukkit.yml
+      - ./spigot.yml:/minecraft/spigot.yml
+      - ./paper.yml:/minecraft/paper.yml
+      - ./ops.json:/minecraft/ops.json
+      - ./whitelist.json:/minecraft/whitelist.json
+      - ./banned-players.json:/minecraft/banned-players.json
+      - ./banned-ips.json:/minecraft/banned-ips.json
+    restart: unless-stopped
+    stdin_open: true
+    tty: true

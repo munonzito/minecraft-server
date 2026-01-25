@@ -1,0 +1,21 @@
+# Bukkit configuration for PaperMC
+settings:
+  spawn-radius: 10
+  seed-version: 0
+  permission-file: permissions.yml
+  update-folder: update
+  plugin-profiling: false
+  connection-throttle: 4000
+  query-plugins: true
+  deprecated-verbose: default
+  shutdown-message: Server closed
+  minimum-api: none
+  import-legacy-stuff: false
+warn-on-overload: true
+permissions-file: permissions.yml
+update-folder: update
+
+chunk-gc:
+  period-in-ticks: 600
+
+aliases: now-in-permissions-file

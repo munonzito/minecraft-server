@@ -1,0 +1,106 @@
+# Spigot configuration for PaperMC
+settings:
+  debug: false
+  save-user-cache-on-stop-only: false
+  sample-count: 12
+  player-shuffle: 0
+  user-cache-size: 1000
+  moved-wrongly-threshold: 0.0625
+  moved-too-quickly-multiplier: 10.0
+  log-villager-deaths: true
+  log-named-deaths: true
+  save-world-countdown: 6
+  timeout-time: 60
+  restart-on-crash: false
+  restart-script: ./start.sh
+  netty-threads: 4
+  late-bind: false
+  bungeecord: false
+  sample-count: 12
+  max-entities: 100
+  max-tick-time:
+    tile: 50
+    entity: 50
+  whitelist-command: ops
+  watchdog:
+    disabled: false
+  spawn-limits:
+    monsters: 70
+    animals: 10
+    water-animals: 15
+    water-ambient: 20
+    ambient: 15
+  chunk-gc:
+    period-in-ticks: 600
+  merge-radius:
+    item: 2.5
+    exp: 3.0
+  entity-activation-range:
+    animals: 32
+    monsters: 32
+    raiders: 48
+    misc: 16
+    water: 16
+    villagers: 32
+    flying-monsters: 32
+  ticks-per:
+    hopper-transfer: 8
+    hopper-check: 8
+  hopper-amount: 1
+  entity-tracking-range:
+    players: 48
+    animals: 48
+    monsters: 48
+    misc: 32
+    other: 64
+  growth:
+    cocoa: 1000
+    bamboo: 1000
+    sugar_cane: 1000
+    cactus: 1000
+    wheat: 1000
+    carrot: 1000
+    potato: 1000
+    beetroot: 1000
+    melon_stem: 1000
+    pumpkin_stem: 1000
+    sweet_berry: 1000
+    vine: 1000
+  mob-spawn-range: 8
+  item-despawn-rate: 6000
+  arrow-despawn-rate: 1200
+  trident-despawn-rate: 1200
+  experience-merge-max-value: -1
+  creative-arrow-despawn-rate: -1
+  zombie-aggressive-towards-villager: true
+  nerf-spawner-mobs: false
+  seed-village: 10387312
+  seed-desert: 14357617
+  seed-igloo: 14357618
+  seed-jungle: 14357619
+  seed-savanna: 14357620
+  seed-swamp: 14357621
+  seed-shipwreck: 165745295
+  seed-ocean: 14357622
+  seed-outpost: 165745296
+  seed-endcity: 10387313
+  seed-slime: 987234911
+  seed-bastion: 30084232
+  seed-fortress: 30084232
+  seed-mansion: 10387319
+  seed-fossil: 14357921
+  seed-portal: 34222645
+  hunger:
+    jump-walk-exhaustion: 0.05
+    jump-sprint-exhaustion: 0.2
+    combat-exhaustion: 0.1
+    regen-exhaustion: 0.6
+    swim-multiplier: 0.01
+    sprint-multiplier: 0.1
+    other-multiplier: 0.0
+  max-jump-height: 0.0
+  max-jump-width: 0.0
+  max-jump-y-distance: 0.0
+  squid-spawn-range:
+    min: 45
+  world-settings: {}

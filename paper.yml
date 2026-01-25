@@ -1,0 +1,200 @@
+# Paper configuration
+_version: 28
+
+settings:
+  use-async-ping: true
+  sleep-between-chunks: true
+  log-named-deaths: true
+  show-incompatible-plugins-warning: true
+  player-auto-save-rate: -1
+  max-packet-queue-size: 100000
+  region-file-cache-size: 256
+  use-alternative-keepalive: true
+  use-bungeecord: false
+  save-on-empty-otherwise-true: true
+  load-permissions-yml-before-plugins: true
+  proxy-protocol: false
+  proxy-protocol-secret: ''
+  velocity-support: false
+  velocity-secret: ''
+  incoming-velocity-network-secret: ''
+  suggest-player-names-when-null-tab-completions: true
+  incoming-velocity-online-mode: true
+  enforce-eula: true
+  lag-compensate-block-breaking: true
+  ensure-worker-count: 0
+  max-player-joins-per-tick: 3
+  async-pathfinding-processors:
+    max-threads-per-world: 63
+    max-total-threads: 63
+  bungee-online-mode: false
+  use-plugin-attribute-limit:
+    max-attributes-per-modifier: 1024
+
+world-settings:
+  default:
+    spawn-limit: { monsters: 70, animals: 10, water-animals: 15, water-ambient: 15, water-underground-creature: 5, axolotls: 5, ambient: 15 }
+    growth: { cactus-modifier: 100, cane-modifier: 100, melon-modifier: 100, mushroom-modifier: 100, pumpkin-modifier: 100, sapling-modifier: 100, beetroot-modifier: 100, carrot-modifier: 100, potato-modifier: 100, wheat-modifier: 100, sweet-berry-modifier: 100, bamboo-modifier: 100, twisting-vines-modifier: 100, weeping-vines-modifier: 100, cave-vines-modifier: 100, glow-berry-modifier: 100 }
+    mob-spawner-tick-rate: 1
+    max-entity-collisions: 8
+    npc-update-range: 48
+    merge-radius:
+      item: 2.5
+      exp: 3.0
+    auto-save-interval: 6000
+    nerf-spawner-mobs: false
+    max-entity-tick-distance:
+      monster: 32
+      creature: 32
+      water: 64
+      water-underground-creature: 32
+      axolotl: 32
+      ambient: 32
+      raider: 32
+      flying-monster: 32
+    max-trackable-entity-head-ticks: 1000
+    per-player-mob-spawns: true
+    entities-target-with-follow-range: true
+    zombie-villager-infection-chance: 0.0
+    all-timers-range-bump: 3.0
+    duplicate-uuid-responder: DELETE_OLD
+    duplicate-uuid-skip-finder-check: false
+    armor-stands-tick: true
+    clone-totem-of-undead-inventory: true
+    armor-stands-do-collision-entity-lookups: true
+    allow-non-player-entities-on-scoreboards: false
+    bed-search-range: 8
+    fishing-time-range:
+      minimum-wait: 100
+      maximum-wait: 600
+    despawn-ranges:
+      soft: 32
+      hard: 128
+    frog-egg-lay-rate: 3
+    portal-search-radius:
+      default: 128
+      nether-height-boost: 256
+    redstone-eject: true
+    anti-circuit-break:
+      redstone: false
+      piston-duplications: false
+      repeater-instant: false
+    iron-golem:
+      pop-particles: true
+    mob-scan-range: 10
+    loot-all-sources: []
+    loot-seed-modifier: 0
+    lightning-strike-sound-fire: true
+    max-growth-height:
+      bamboo: 16
+      cactus: 3
+      reeds: 3
+      twisting-vines: 25
+      weeping-vines: 25
+    simulate-block-ticking: true
+    allow-teleportation-in-water: true
+    allow-snow-turn-to-ice: true
+    freeze-water-in-cold-biomes: true
+    config-modded-block-entities:
+      default: { skip-tick: false }
+    alt-item-despawn-rate: enabled
+      remove-unloaded-ticking-entities-in-range: false
+      tracking-range:
+        zombie: 48
+        piglin-brute: 48
+        warden: 48
+        axolotl: 48
+        endermite: 32
+        phantom: 32
+        shulker: 48
+        wither: 48
+        wandering-trader: 32
+        dragon: 128
+        ender-dragon: 128
+        guardian-sniper: 48
+        creeper: 48
+        ghast: 48
+        skeleton: 48
+        spider: 32
+        slime: 32
+        villager: 32
+        witch: 32
+        zombified-piglin: 48
+        dolphin: 32
+        piglin: 32
+        pufferfish: 24
+        cave-spider: 32
+        silverfish: 24
+        tropical-fish: 24
+        elder-guardian: 48
+        copper-golem: 32
+      flying-collision-damage: {}
+      boat-collision-effort: false
+      dragon-death-sounds-radius: 0
+      prevent-ocean-monsters-from-converting-in-deep-warm-biomes: false
+      use-faster-entity-lookup-by-type: true
+      armor-stands-move-smoothly: true
+      entity-per-chunk-save-limit:
+        armor-stand: 40
+        ender-pearl: 10
+        ender-crystal: 0
+        area-effect-cloud: 10
+        glowing-item: 10
+        experience-bottle: 10
+        arrow: 10
+        item: 40
+      loot-from-fishing-table: true
+      disable-piston-teleport-dependency: false
+      disable-creature-spawn-radius-outward-check: false
+      player-physics-allows-flying: false
+      fix-climbing-stuck-at-zero-velocity: false
+      use-alternate-falling-block-logic: false
+      use-optimized-damage: true
+      villagers-work-round-clock: false
+      enable-regular-forest-vegetation-in-enchanted-forest-biomes: false
+      prevent-spammy-tick-boosting-pollution: {}
+      skip-ending-if-no-players: true
+      allow-non-player-entities-to-save-in-chunks: false
+      use-sparse-lookup-mappings: true
+      enable-matrix-check: true
+      allow-piston-duplication: false
+      generate-flat-bedrock: false
+      allow-permanent-block-break-exploits: false
+      fix-zero-tick-plants: true
+      keep-loaded-range: {}
+      fast-death-messages: true
+      allow-keeping-loaded-entities-in-chunks: true
+      allow-leather-dye-color-update: true
+      fix-phantom-ookeri-loose-bounds-race-condition: false
+      disable-enderman-aggression-towards-endermite-change-block: false
+      fix-block-break-coop-dropping-both-items-only-once: true
+      prevent-players-from-spawning-end-crystals: false
+      limit-enderman-block-pickup-distance: false
+      bed-fail-message: bed-obstruction
+      block-break-failure-drops-items: false
+      enable-treasure-maps: true
+      generate-treasure-maps-post-generation: false
+      treasure-map-return-already-discovered: false
+      allow-piston-duplication-list: []
+      strict-advancements: false
+      despawn-mobs-partially-formed-rain-bug-fix: false
+      fix-chunk-loading-edge-cases: true
+      fix-climbing-tickets-not-being-deleted: true
+      disable-protocol-read-wait: true
+      use-clean-chunk-schedule: false
+      send-spawn-packets-before-joining: false
+      use-precise-block-dropping: true
+      disable-ice-snow-melting: false
+      show-axe-enchantments-in-hud: false
+      show-shield-enchantments-in-hud: false
+      show-bow-enchantments-in-hud: false
+      show-crossbow-enchantments-in-hud: false
+      allow-leaf-decay-during-world-generation: false
+      optimize-explosions: false
+      no-operations-in-unloaded-chunks: {}
+      allow-undead-horse-saddling: false
+      villager-ai-logs-enabled: false
+      allow-sitting-npc-with-leash: false
+      villager-merging: false
+      prevent-connection-issues-to-vanilla-clients: false
+      enable-abstract-cache: true

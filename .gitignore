@@ -1,0 +1,39 @@
+# Minecraft Server Files
+world/
+world_nether/
+world_the_end/
+plugins/
+logs/
+crash-reports/
+versions/
+
+# Server JAR (downloaded automatically)
+paper.jar
+*.jar
+*.jar.backup
+
+# EULA file (user must modify)
+eula.txt
+
+# Server cache
+cache/
+work/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Docker
+.docker/
+
+# Temporary files
+*.tmp
+*.log
