@@ -9,7 +9,7 @@ services:
     environment:
       - XMX=4G
       - XMS=4G
-      - PAPER_VERSION=1.21
+      - PAPER_VERSION=1.21.11
     volumes:
       - ./world:/minecraft/world
       - ./world_nether:/minecraft/world_nether
@@ -18,7 +18,7 @@ services:
       - ./server.properties:/minecraft/server.properties
       - ./bukkit.yml:/minecraft/bukkit.yml
       - ./spigot.yml:/minecraft/spigot.yml
-      - ./paper.yml:/minecraft/paper.yml
+
       - ./ops.json:/minecraft/ops.json
       - ./whitelist.json:/minecraft/whitelist.json
       - ./banned-players.json:/minecraft/banned-players.json

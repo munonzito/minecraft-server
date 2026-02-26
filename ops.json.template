@@ -1,0 +1,20 @@
+[
+  {
+    "uuid": "2cab7d46-6634-4d8e-823f-521531facb27",
+    "name": "Passaito",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "07dcd53f-4a55-4537-bffc-becc0663a9a1",
+    "name": "munonzito",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "6afbb8aa-c247-4f2f-b733-ab540b737318",
+    "name": "Z3r0Pr0",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  }
+]

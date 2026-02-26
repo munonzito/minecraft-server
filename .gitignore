@@ -34,6 +34,10 @@ work/
 # Docker
 .docker/
 
+# Sensitive server files (use .template versions)
+server.properties
+ops.json
+
 # Temporary files
 *.tmp
 *.log
