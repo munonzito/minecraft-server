@@ -53,9 +53,10 @@ public class CastleBuilder {
     }
 
     private void clearArea(World world, int cx, int cy, int cz) {
-        int half = WALL_LENGTH / 2 + TOWER_SIZE + 5;
-        for (int x = cx - half; x <= cx + half; x++) {
-            for (int z = cz - half; z <= cz + half; z++) {
+        int halfX = WALL_LENGTH / 2 + TOWER_SIZE + 25;
+        int halfZ = WALL_LENGTH / 2 + TOWER_SIZE + 15;
+        for (int x = cx - halfX; x <= cx + halfX; x++) {
+            for (int z = cz - halfZ; z <= cz + halfZ; z++) {
                 for (int y = cy; y <= cy + TOWER_HEIGHT + 5; y++) {
                     setBlock(world, x, y, z, Material.AIR);
                 }
@@ -72,9 +73,10 @@ public class CastleBuilder {
             }
         }
 
-        int outerHalf = half + 10;
-        for (int x = cx - outerHalf; x <= cx + outerHalf; x++) {
-            for (int z = cz - outerHalf; z <= cz + outerHalf; z++) {
+        int outerX = half + 25;
+        int outerZ = half + 15;
+        for (int x = cx - outerX; x <= cx + outerX; x++) {
+            for (int z = cz - outerZ; z <= cz + outerZ; z++) {
                 if (x < cx - half || x > cx + half || z < cz - half || z > cz + half) {
                     setBlock(world, x, cy - 1, z, Material.GRASS_BLOCK);
                     setBlock(world, x, cy, z, Material.AIR);
@@ -193,7 +195,7 @@ public class CastleBuilder {
             }
         }
 
-        int pathLength = 8;
+        int pathLength = 18;
         for (int dx = 1; dx <= pathLength; dx++) {
             for (int z = cz - gateHalf; z <= cz + gateHalf; z++) {
                 setBlock(world, gateX + dx, cy, z, Material.COBBLESTONE);
@@ -328,132 +330,138 @@ public class CastleBuilder {
         }
     }
 
-    private void buildDefenderStable(World world, int cx, int cy, int cz) {
-        int half = WALL_LENGTH / 2;
-        int sx = cx + 5;
-        int sz = cz + half - 8;
+    private void buildStable(World world, int sx, int cy, int sz) {
+        int halfX = 5;
+        int halfZ = 4;
 
-        for (int x = sx - 3; x <= sx + 3; x++) {
-            for (int z = sz - 2; z <= sz + 2; z++) {
-                setBlock(world, x, cy, z, Material.SPRUCE_PLANKS);
-            }
-        }
-
-        for (int y = cy + 1; y <= cy + 4; y++) {
-            for (int x = sx - 3; x <= sx + 3; x++) {
-                setBlock(world, x, y, sz - 2, Material.SPRUCE_LOG);
-                setBlock(world, x, y, sz + 2, Material.SPRUCE_LOG);
-            }
-            setBlock(world, sx - 3, y, sz - 1, Material.SPRUCE_PLANKS);
-            setBlock(world, sx - 3, y, sz, Material.SPRUCE_PLANKS);
-            setBlock(world, sx - 3, y, sz + 1, Material.SPRUCE_PLANKS);
-        }
-
-        for (int x = sx - 3; x <= sx + 3; x++) {
-            for (int z = sz - 2; z <= sz + 2; z++) {
-                setBlock(world, x, cy + 4, z, Material.SPRUCE_SLAB);
-            }
-        }
-
-        for (int z = sz - 1; z <= sz + 1; z += 2) {
-            setBlock(world, sx - 1, cy + 1, z, Material.OAK_FENCE);
-            setBlock(world, sx + 1, cy + 1, z, Material.OAK_FENCE);
-        }
-
-        setBlock(world, sx, cy, sz, Material.HAY_BLOCK);
-        setBlock(world, sx - 2, cy + 1, sz, Material.TORCH);
-        setBlock(world, sx + 2, cy + 1, sz, Material.TORCH);
-    }
-
-    private void buildAttackerStable(World world, int cx, int cy, int cz) {
-        int half = WALL_LENGTH / 2;
-        int sx = cx + half + 8;
-        int sz = cz + 6;
-
-        for (int x = sx - 3; x <= sx + 3; x++) {
-            for (int z = sz - 2; z <= sz + 2; z++) {
+        for (int x = sx - halfX; x <= sx + halfX; x++) {
+            for (int z = sz - halfZ; z <= sz + halfZ; z++) {
                 setBlock(world, x, cy - 1, z, Material.SPRUCE_PLANKS);
                 setBlock(world, x, cy, z, Material.SPRUCE_PLANKS);
             }
         }
 
         for (int y = cy + 1; y <= cy + 4; y++) {
-            for (int x = sx - 3; x <= sx + 3; x++) {
-                setBlock(world, x, y, sz - 2, Material.SPRUCE_LOG);
-                setBlock(world, x, y, sz + 2, Material.SPRUCE_LOG);
+            for (int x = sx - halfX; x <= sx + halfX; x++) {
+                setBlock(world, x, y, sz - halfZ, Material.SPRUCE_LOG);
+                setBlock(world, x, y, sz + halfZ, Material.SPRUCE_LOG);
             }
-            setBlock(world, sx + 3, y, sz - 1, Material.SPRUCE_PLANKS);
-            setBlock(world, sx + 3, y, sz, Material.SPRUCE_PLANKS);
-            setBlock(world, sx + 3, y, sz + 1, Material.SPRUCE_PLANKS);
-        }
-
-        for (int x = sx - 3; x <= sx + 3; x++) {
-            for (int z = sz - 2; z <= sz + 2; z++) {
-                setBlock(world, x, cy + 4, z, Material.SPRUCE_SLAB);
+            for (int z = sz - halfZ; z <= sz + halfZ; z++) {
+                setBlock(world, sx - halfX, y, z, Material.SPRUCE_PLANKS);
             }
         }
 
-        for (int z = sz - 1; z <= sz + 1; z += 2) {
-            setBlock(world, sx - 1, cy + 1, z, Material.OAK_FENCE);
-            setBlock(world, sx + 1, cy + 1, z, Material.OAK_FENCE);
+        for (int y = cy + 1; y <= cy + 4; y++) {
+            for (int x = sx - halfX + 1; x <= sx + halfX; x++) {
+                for (int z = sz - halfZ + 1; z <= sz + halfZ - 1; z++) {
+                    setBlock(world, x, y, z, Material.AIR);
+                }
+            }
         }
 
-        setBlock(world, sx, cy, sz, Material.HAY_BLOCK);
-        setBlock(world, sx - 2, cy + 1, sz, Material.TORCH);
-        setBlock(world, sx + 2, cy + 1, sz, Material.TORCH);
+        for (int x = sx - halfX; x <= sx + halfX; x++) {
+            for (int z = sz - halfZ; z <= sz + halfZ; z++) {
+                setBlock(world, x, cy + 5, z, Material.SPRUCE_SLAB);
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            int stallZ = sz - 3 + (i * 3);
+            setBlock(world, sx - 3, cy + 1, stallZ, Material.OAK_FENCE);
+            setBlock(world, sx + 1, cy + 1, stallZ, Material.OAK_FENCE);
+        }
+
+        setBlock(world, sx - 4, cy, sz, Material.HAY_BLOCK);
+        setBlock(world, sx - 4, cy + 1, sz, Material.HAY_BLOCK);
+        setBlock(world, sx - 4, cy, sz - 2, Material.HAY_BLOCK);
+        setBlock(world, sx + 4, cy, sz, Material.HAY_BLOCK);
+        setBlock(world, sx + 4, cy + 1, sz, Material.HAY_BLOCK);
+
+        setBlock(world, sx - halfX + 1, cy + 3, sz - halfZ + 1, Material.TORCH);
+        setBlock(world, sx - halfX + 1, cy + 3, sz + halfZ - 1, Material.TORCH);
+        setBlock(world, sx + halfX - 1, cy + 3, sz - halfZ + 1, Material.TORCH);
+        setBlock(world, sx + halfX - 1, cy + 3, sz + halfZ - 1, Material.TORCH);
+
+        setBlock(world, sx, cy, sz - 2, Material.WATER);
+        setBlock(world, sx - 1, cy + 1, sz - 2, Material.COBBLESTONE_WALL);
+        setBlock(world, sx + 1, cy + 1, sz - 2, Material.COBBLESTONE_WALL);
+        setBlock(world, sx, cy + 1, sz - 3, Material.COBBLESTONE_WALL);
+    }
+
+    private void buildDefenderStable(World world, int cx, int cy, int cz) {
+        int half = WALL_LENGTH / 2;
+        int sx = cx + 5;
+        int sz = cz + half - 10;
+        buildStable(world, sx, cy, sz);
+    }
+
+    private void buildAttackerStable(World world, int cx, int cy, int cz) {
+        int half = WALL_LENGTH / 2;
+        int sx = cx + half + 18;
+        int sz = cz + 6;
+        buildStable(world, sx, cy, sz);
     }
 
     private void buildTowerAccess(World world, int cx, int cy, int cz) {
         int half = WALL_LENGTH / 2;
-        int[][] towerBases = {
-                {cx - half - 1, cz - half - 1},
-                {cx + half + 1, cz - half - 1},
-                {cx - half - 1, cz + half + 1},
-                {cx + half + 1, cz + half + 1}
-        };
+        int halfT = TOWER_SIZE / 2;
 
-        for (int[] tb : towerBases) {
-            int tx = tb[0];
-            int tz = tb[1];
-            int halfT = TOWER_SIZE / 2;
+        // Tower positions: {towerX, towerZ, ladderX, ladderZ, wallX (solid behind ladder), doorX, doorZ, towerWallX, towerWallZ}
+        // For each tower, place ladder against the outer wall (facing inward) and carve a doorway through the castle wall + tower wall
 
-            int ladderX, ladderZ;
-            if (tx < cx) {
-                ladderX = tx + halfT;
-            } else {
-                ladderX = tx - halfT;
-            }
-            if (tz < cz) {
-                ladderZ = tz + halfT;
-            } else {
-                ladderZ = tz - halfT;
-            }
+        // Bottom-left tower (cx - half - 1, cz - half - 1) -> ladder on +X wall, door on +X side
+        buildSingleTowerAccess(world, cx, cy, cz,
+                cx - half - 1, cz - half - 1,
+                cx - half - 1 + halfT - 1, cz - half - 1,  // ladder position (inside, against +X wall)
+                cx - half - 1 + halfT, cz - half - 1,       // wall behind ladder
+                cx - half, cz - half - 1,                    // castle wall doorway
+                cx - half - 1 + halfT, cz - half - 1);      // tower wall doorway
 
-            for (int y = cy + 1; y <= cy + TOWER_HEIGHT; y++) {
-                setBlock(world, ladderX, y, ladderZ, Material.LADDER);
-            }
+        // Bottom-right tower (cx + half + 1, cz - half - 1) -> ladder on -X wall, door on -X side
+        buildSingleTowerAccess(world, cx, cy, cz,
+                cx + half + 1, cz - half - 1,
+                cx + half + 1 - halfT + 1, cz - half - 1,
+                cx + half + 1 - halfT, cz - half - 1,
+                cx + half, cz - half - 1,
+                cx + half + 1 - halfT, cz - half - 1);
 
-            int doorX, doorZ;
-            if (tx < cx) {
-                doorX = tx + halfT + 1;
-                doorZ = tz < cz ? tz + halfT : tz - halfT;
-            } else {
-                doorX = tx - halfT - 1;
-                doorZ = tz < cz ? tz + halfT : tz - halfT;
-            }
+        // Top-left tower (cx - half - 1, cz + half + 1) -> ladder on +X wall, door on +X side
+        buildSingleTowerAccess(world, cx, cy, cz,
+                cx - half - 1, cz + half + 1,
+                cx - half - 1 + halfT - 1, cz + half + 1,
+                cx - half - 1 + halfT, cz + half + 1,
+                cx - half, cz + half + 1,
+                cx - half - 1 + halfT, cz + half + 1);
 
-            for (int y = cy + 1; y <= cy + 3; y++) {
-                setBlock(world, doorX, y, doorZ, Material.AIR);
-            }
+        // Top-right tower (cx + half + 1, cz + half + 1) -> ladder on -X wall, door on -X side
+        buildSingleTowerAccess(world, cx, cy, cz,
+                cx + half + 1, cz + half + 1,
+                cx + half + 1 - halfT + 1, cz + half + 1,
+                cx + half + 1 - halfT, cz + half + 1,
+                cx + half, cz + half + 1,
+                cx + half + 1 - halfT, cz + half + 1);
+    }
 
-            int innerDoorZ = doorZ;
-            for (int y = cy + 1; y <= cy + 3; y++) {
-                if (tx < cx) {
-                    setBlock(world, tx + halfT, y, innerDoorZ, Material.AIR);
-                } else {
-                    setBlock(world, tx - halfT, y, innerDoorZ, Material.AIR);
-                }
-            }
+    private void buildSingleTowerAccess(World world, int cx, int cy, int cz,
+                                         int tx, int tz,
+                                         int ladderX, int ladderZ,
+                                         int wallBehindX, int wallBehindZ,
+                                         int doorX, int doorZ,
+                                         int towerDoorX, int towerDoorZ) {
+        // Ensure wall behind ladder is solid
+        for (int y = cy + 1; y <= cy + TOWER_HEIGHT; y++) {
+            setBlock(world, wallBehindX, y, wallBehindZ, Material.STONE_BRICKS);
+            setBlock(world, ladderX, y, ladderZ, Material.LADDER);
+        }
+
+        // Carve doorway through castle wall
+        for (int y = cy + 1; y <= cy + 3; y++) {
+            setBlock(world, doorX, y, doorZ, Material.AIR);
+        }
+
+        // Carve doorway through tower wall
+        for (int y = cy + 1; y <= cy + 3; y++) {
+            setBlock(world, towerDoorX, y, towerDoorZ, Material.AIR);
         }
     }
 
@@ -464,16 +472,16 @@ public class CastleBuilder {
         int cz = center.getBlockZ();
         int half = WALL_LENGTH / 2;
 
-        Location attackerSpawn = new Location(world, cx + half + 12, cy + 1, cz, 270f, 0f);
+        Location attackerSpawn = new Location(world, cx + half + 20, cy + 1, cz, 270f, 0f);
         arenaManager.setSpawn(Team.ATTACKERS, attackerSpawn);
 
         Location defenderSpawn = new Location(world, cx, cy + 1, cz, 270f, 0f);
         arenaManager.setSpawn(Team.DEFENDERS, defenderSpawn);
 
-        Location defenderStable = new Location(world, cx + 5, cy + 1, cz + half - 8);
+        Location defenderStable = new Location(world, cx + 5, cy + 1, cz + half - 10);
         arenaManager.setStable(Team.DEFENDERS, defenderStable);
 
-        Location attackerStable = new Location(world, cx + half + 8, cy + 1, cz + 6);
+        Location attackerStable = new Location(world, cx + half + 18, cy + 1, cz + 6);
         arenaManager.setStable(Team.ATTACKERS, attackerStable);
     }
 
