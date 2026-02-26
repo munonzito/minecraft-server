@@ -1,7 +1,7 @@
 game:
   duration-seconds: 600
   respawn-delay-seconds: 10
-  min-players: 2
+  min-players: 1
   countdown-seconds: 10
 
 arena:

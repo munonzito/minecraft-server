@@ -15,6 +15,8 @@ public class ArenaManager {
     private Location defendersSpawn;
     private Location targetBlockLocation;
     private Material targetBlockMaterial;
+    private Location attackersStable;
+    private Location defendersStable;
 
     public ArenaManager(CastleDefensePlugin plugin) {
         this.plugin = plugin;
@@ -104,6 +106,24 @@ public class ArenaManager {
 
     public Location getSpawn(Team team) {
         return team == Team.ATTACKERS ? attackersSpawn.clone() : defendersSpawn.clone();
+    }
+
+    public void setStable(Team team, Location location) {
+        String path = team == Team.ATTACKERS ? "arena.attackers-stable" : "arena.defenders-stable";
+        plugin.getConfig().set(path + ".x", location.getX());
+        plugin.getConfig().set(path + ".y", location.getY());
+        plugin.getConfig().set(path + ".z", location.getZ());
+        plugin.saveConfig();
+
+        if (team == Team.ATTACKERS) {
+            attackersStable = location;
+        } else {
+            defendersStable = location;
+        }
+    }
+
+    public Location getStable(Team team) {
+        return team == Team.ATTACKERS ? attackersStable : defendersStable;
     }
 
     public Location getTargetBlockLocation() {

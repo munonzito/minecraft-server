@@ -44,6 +44,9 @@ public class CastleBuilder {
         buildThroneRoom(world, cx, cy, cz);
         buildBattlements(world, cx, cy, cz);
         buildInterior(world, cx, cy, cz);
+        buildDefenderStable(world, cx, cy, cz);
+        buildAttackerStable(world, cx, cy, cz);
+        buildTowerAccess(world, cx, cy, cz);
         setupSpawnsAndTarget(center);
 
         plugin.getLogger().info("Castle built at " + cx + ", " + cy + ", " + cz);
@@ -325,6 +328,135 @@ public class CastleBuilder {
         }
     }
 
+    private void buildDefenderStable(World world, int cx, int cy, int cz) {
+        int half = WALL_LENGTH / 2;
+        int sx = cx + 5;
+        int sz = cz + half - 8;
+
+        for (int x = sx - 3; x <= sx + 3; x++) {
+            for (int z = sz - 2; z <= sz + 2; z++) {
+                setBlock(world, x, cy, z, Material.SPRUCE_PLANKS);
+            }
+        }
+
+        for (int y = cy + 1; y <= cy + 4; y++) {
+            for (int x = sx - 3; x <= sx + 3; x++) {
+                setBlock(world, x, y, sz - 2, Material.SPRUCE_LOG);
+                setBlock(world, x, y, sz + 2, Material.SPRUCE_LOG);
+            }
+            setBlock(world, sx - 3, y, sz - 1, Material.SPRUCE_PLANKS);
+            setBlock(world, sx - 3, y, sz, Material.SPRUCE_PLANKS);
+            setBlock(world, sx - 3, y, sz + 1, Material.SPRUCE_PLANKS);
+        }
+
+        for (int x = sx - 3; x <= sx + 3; x++) {
+            for (int z = sz - 2; z <= sz + 2; z++) {
+                setBlock(world, x, cy + 4, z, Material.SPRUCE_SLAB);
+            }
+        }
+
+        for (int z = sz - 1; z <= sz + 1; z += 2) {
+            setBlock(world, sx - 1, cy + 1, z, Material.OAK_FENCE);
+            setBlock(world, sx + 1, cy + 1, z, Material.OAK_FENCE);
+        }
+
+        setBlock(world, sx, cy, sz, Material.HAY_BLOCK);
+        setBlock(world, sx - 2, cy + 1, sz, Material.TORCH);
+        setBlock(world, sx + 2, cy + 1, sz, Material.TORCH);
+    }
+
+    private void buildAttackerStable(World world, int cx, int cy, int cz) {
+        int half = WALL_LENGTH / 2;
+        int sx = cx + half + 8;
+        int sz = cz + 6;
+
+        for (int x = sx - 3; x <= sx + 3; x++) {
+            for (int z = sz - 2; z <= sz + 2; z++) {
+                setBlock(world, x, cy - 1, z, Material.SPRUCE_PLANKS);
+                setBlock(world, x, cy, z, Material.SPRUCE_PLANKS);
+            }
+        }
+
+        for (int y = cy + 1; y <= cy + 4; y++) {
+            for (int x = sx - 3; x <= sx + 3; x++) {
+                setBlock(world, x, y, sz - 2, Material.SPRUCE_LOG);
+                setBlock(world, x, y, sz + 2, Material.SPRUCE_LOG);
+            }
+            setBlock(world, sx + 3, y, sz - 1, Material.SPRUCE_PLANKS);
+            setBlock(world, sx + 3, y, sz, Material.SPRUCE_PLANKS);
+            setBlock(world, sx + 3, y, sz + 1, Material.SPRUCE_PLANKS);
+        }
+
+        for (int x = sx - 3; x <= sx + 3; x++) {
+            for (int z = sz - 2; z <= sz + 2; z++) {
+                setBlock(world, x, cy + 4, z, Material.SPRUCE_SLAB);
+            }
+        }
+
+        for (int z = sz - 1; z <= sz + 1; z += 2) {
+            setBlock(world, sx - 1, cy + 1, z, Material.OAK_FENCE);
+            setBlock(world, sx + 1, cy + 1, z, Material.OAK_FENCE);
+        }
+
+        setBlock(world, sx, cy, sz, Material.HAY_BLOCK);
+        setBlock(world, sx - 2, cy + 1, sz, Material.TORCH);
+        setBlock(world, sx + 2, cy + 1, sz, Material.TORCH);
+    }
+
+    private void buildTowerAccess(World world, int cx, int cy, int cz) {
+        int half = WALL_LENGTH / 2;
+        int[][] towerBases = {
+                {cx - half - 1, cz - half - 1},
+                {cx + half + 1, cz - half - 1},
+                {cx - half - 1, cz + half + 1},
+                {cx + half + 1, cz + half + 1}
+        };
+
+        for (int[] tb : towerBases) {
+            int tx = tb[0];
+            int tz = tb[1];
+            int halfT = TOWER_SIZE / 2;
+
+            int ladderX, ladderZ;
+            if (tx < cx) {
+                ladderX = tx + halfT;
+            } else {
+                ladderX = tx - halfT;
+            }
+            if (tz < cz) {
+                ladderZ = tz + halfT;
+            } else {
+                ladderZ = tz - halfT;
+            }
+
+            for (int y = cy + 1; y <= cy + TOWER_HEIGHT; y++) {
+                setBlock(world, ladderX, y, ladderZ, Material.LADDER);
+            }
+
+            int doorX, doorZ;
+            if (tx < cx) {
+                doorX = tx + halfT + 1;
+                doorZ = tz < cz ? tz + halfT : tz - halfT;
+            } else {
+                doorX = tx - halfT - 1;
+                doorZ = tz < cz ? tz + halfT : tz - halfT;
+            }
+
+            for (int y = cy + 1; y <= cy + 3; y++) {
+                setBlock(world, doorX, y, doorZ, Material.AIR);
+            }
+
+            int innerDoorZ = doorZ;
+            for (int y = cy + 1; y <= cy + 3; y++) {
+                if (tx < cx) {
+                    setBlock(world, tx + halfT, y, innerDoorZ, Material.AIR);
+                } else {
+                    setBlock(world, tx - halfT, y, innerDoorZ, Material.AIR);
+                }
+            }
+        }
+    }
+
     private void setupSpawnsAndTarget(Location center) {
         World world = center.getWorld();
         int cx = center.getBlockX();
@@ -337,6 +469,12 @@ public class CastleBuilder {
 
         Location defenderSpawn = new Location(world, cx, cy + 1, cz, 270f, 0f);
         arenaManager.setSpawn(Team.DEFENDERS, defenderSpawn);
+
+        Location defenderStable = new Location(world, cx + 5, cy + 1, cz + half - 8);
+        arenaManager.setStable(Team.DEFENDERS, defenderStable);
+
+        Location attackerStable = new Location(world, cx + half + 8, cy + 1, cz + 6);
+        arenaManager.setStable(Team.ATTACKERS, attackerStable);
     }
 
     private void setBlock(World world, int x, int y, int z, Material material) {

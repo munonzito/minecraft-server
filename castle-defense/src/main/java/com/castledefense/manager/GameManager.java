@@ -10,8 +10,13 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -30,9 +35,12 @@ public class GameManager {
     private final Set<UUID> gamePlayers = new HashSet<>();
     private final Map<UUID, BukkitTask> respawnTasks = new HashMap<>();
 
+    private final List<Horse> spawnedHorses = new ArrayList<>();
     private BukkitTask gameTimerTask;
     private BukkitTask countdownTask;
     private int timeRemaining;
+
+    private static final int HORSES_PER_TEAM = 3;
 
     public GameManager(CastleDefensePlugin plugin, ArenaManager arenaManager, KitManager kitManager) {
         this.plugin = plugin;
@@ -119,6 +127,7 @@ public class GameManager {
             player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0f, 1.0f);
         }
 
+        spawnHorses();
         broadcastToPlayers(plugin.getMessage("game-started"));
         startGameTimer();
     }
@@ -249,7 +258,42 @@ public class GameManager {
         cleanup();
     }
 
+    private void spawnHorses() {
+        for (Team team : Team.values()) {
+            Location stable = arenaManager.getStable(team);
+            if (stable == null) continue;
+
+            Horse.Color color = team == Team.ATTACKERS ? Horse.Color.DARK_BROWN : Horse.Color.WHITE;
+
+            for (int i = 0; i < HORSES_PER_TEAM; i++) {
+                Location spawnLoc = stable.clone().add(i * 2 - 2, 0, 0);
+                Horse horse = stable.getWorld().spawn(spawnLoc, Horse.class, h -> {
+                    h.setTamed(true);
+                    h.setColor(color);
+                    h.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+                    h.setCustomName(team.getColor() + team.getDisplayName() + " Horse");
+                    h.setCustomNameVisible(true);
+                    h.getAttribute(Attribute.MAX_HEALTH).setBaseValue(40.0);
+                    h.setHealth(40.0);
+                    h.setAdult();
+                });
+                spawnedHorses.add(horse);
+            }
+        }
+    }
+
+    private void removeHorses() {
+        for (Horse horse : spawnedHorses) {
+            if (horse != null && !horse.isDead()) {
+                horse.getPassengers().forEach(horse::removePassenger);
+                horse.remove();
+            }
+        }
+        spawnedHorses.clear();
+    }
+
     private void cleanup() {
+        removeHorses();
         playerTeams.clear();
         gamePlayers.clear();
         respawnTasks.values().forEach(BukkitTask::cancel);
