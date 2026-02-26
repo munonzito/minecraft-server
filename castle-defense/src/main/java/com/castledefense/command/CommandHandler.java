@@ -2,6 +2,7 @@ package com.castledefense.command;
 
 import com.castledefense.CastleDefensePlugin;
 import com.castledefense.manager.ArenaManager;
+import com.castledefense.manager.CastleBuilder;
 import com.castledefense.manager.GameManager;
 import com.castledefense.manager.KitManager;
 import com.castledefense.model.GameState;
@@ -27,13 +28,16 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     private final GameManager gameManager;
     private final ArenaManager arenaManager;
     private final KitManager kitManager;
+    private final CastleBuilder castleBuilder;
 
     public CommandHandler(CastleDefensePlugin plugin, GameManager gameManager,
-                          ArenaManager arenaManager, KitManager kitManager) {
+                          ArenaManager arenaManager, KitManager kitManager,
+                          CastleBuilder castleBuilder) {
         this.plugin = plugin;
         this.gameManager = gameManager;
         this.arenaManager = arenaManager;
         this.kitManager = kitManager;
+        this.castleBuilder = castleBuilder;
     }
 
     @Override
@@ -56,6 +60,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             case "stop" -> handleStop(player);
             case "setspawn" -> handleSetSpawn(player, args);
             case "settarget" -> handleSetTarget(player);
+            case "build" -> handleBuild(player);
             case "status" -> handleStatus(player);
             default -> sendHelp(player);
         }
@@ -188,6 +193,24 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         msg(player, "§aTarget block location set! An §6Orange Banner §awill be placed here when the game starts.");
     }
 
+    private void handleBuild(Player player) {
+        if (!player.hasPermission("castledefense.admin")) {
+            msg(player, "§cYou don't have permission to do this.");
+            return;
+        }
+
+        if (gameManager.isGameActive()) {
+            msg(player, "§cCan't build a castle while a game is running!");
+            return;
+        }
+
+        msg(player, "§eBuilding castle at your location... This may take a moment.");
+        castleBuilder.buildCastle(player.getLocation());
+        msg(player, "§aCastle built! Spawns and target banner have been set automatically.");
+        msg(player, "§7Attackers spawn outside the gate. Defenders spawn in the courtyard.");
+        msg(player, "§7The target §6Orange Banner §7is inside the throne room.");
+    }
+
     private void handleStatus(Player player) {
         GameState state = gameManager.getState();
         player.sendMessage(Component.text("=== Castle Defense Status ===", NamedTextColor.GOLD));
@@ -220,6 +243,8 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                 .append(Component.text(" - View game status", NamedTextColor.GRAY)));
 
         if (player.hasPermission("castledefense.admin")) {
+            player.sendMessage(Component.text("/castle build", NamedTextColor.GREEN)
+                    .append(Component.text(" - Build a castle at your location", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle start", NamedTextColor.GREEN)
                     .append(Component.text(" - Start the game", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle stop", NamedTextColor.GREEN)
@@ -249,7 +274,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> subs = new ArrayList<>(Arrays.asList("join", "kit", "status"));
             if (sender.hasPermission("castledefense.admin")) {
-                subs.addAll(Arrays.asList("start", "stop", "setspawn", "settarget"));
+                subs.addAll(Arrays.asList("build", "start", "stop", "setspawn", "settarget"));
             }
             completions = subs.stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))

@@ -8,7 +8,7 @@ authors: [martinmunoz]
 commands:
   castle:
     description: Castle Defense game commands
-    usage: /<command> <start|stop|join|kit|setspawn|settarget|status>
+    usage: /<command> <build|start|stop|join|kit|setspawn|settarget|status>
     aliases: [cd]
 
 permissions:
