@@ -38,6 +38,9 @@ work/
 server.properties
 ops.json
 
+# Maven build output
+castle-defense/target/
+
 # Temporary files
 *.tmp
 *.log

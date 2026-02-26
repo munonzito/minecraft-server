@@ -1,0 +1,40 @@
+game:
+  duration-seconds: 600
+  respawn-delay-seconds: 10
+  min-players: 2
+  countdown-seconds: 10
+
+arena:
+  world: "world"
+  attackers-spawn:
+    x: 0.0
+    y: 64.0
+    z: 0.0
+    yaw: 0.0
+    pitch: 0.0
+  defenders-spawn:
+    x: 0.0
+    y: 64.0
+    z: 0.0
+    yaw: 0.0
+    pitch: 0.0
+  target-block:
+    x: 0
+    y: 64
+    z: 0
+    material: "ORANGE_BANNER"
+
+messages:
+  prefix: "&6[CastleDefense] &r"
+  game-started: "&aThe battle has begun! Attackers, destroy the castle banner!"
+  game-ended-attackers-win: "&cThe attackers have conquered the castle!"
+  game-ended-defenders-win: "&aThe defenders held the castle! Victory!"
+  game-stopped: "&eThe game has been stopped by an admin."
+  player-joined: "&e%player% has joined the battle!"
+  team-assigned: "&eYou have been assigned to the &b%team% &eteam!"
+  kit-selected: "&aYou selected the &b%kit% &akit!"
+  respawning: "&eRespawning in %seconds% seconds..."
+  not-enough-players: "&cNeed at least %min% players to start!"
+  game-already-running: "&cA game is already in progress!"
+  no-game-running: "&cNo game is currently running!"
+  countdown: "&eGame starting in &b%seconds% &eseconds!"

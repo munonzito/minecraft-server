@@ -1,0 +1,20 @@
+name: CastleDefense
+version: '${project.version}'
+main: com.castledefense.CastleDefensePlugin
+api-version: '1.21'
+description: Castle Attack/Defense minigame
+authors: [martinmunoz]
+
+commands:
+  castle:
+    description: Castle Defense game commands
+    usage: /<command> <start|stop|join|kit|setspawn|settarget|status>
+    aliases: [cd]
+
+permissions:
+  castledefense.admin:
+    description: Allows admin commands (start, stop, setspawn, settarget)
+    default: op
+  castledefense.play:
+    description: Allows playing the game (join, kit)
+    default: true
