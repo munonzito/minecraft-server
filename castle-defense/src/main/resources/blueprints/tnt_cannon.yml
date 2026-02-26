@@ -1,0 +1,75 @@
+# TNT Cannon Blueprint
+# Firing direction: -X (west)
+# Origin: back-right corner (where the button is)
+# Coordinates are relative offsets from origin: [dx, dy, dz]
+# dx: negative = toward firing direction, positive = toward back
+# dy: 0 = base layer, 1 = top layer
+# dz: 0 = center (trough), -1 = south wall, +1 = north wall
+
+name: "TNT Cannon"
+description: "A working TNT cannon with 4 charge TNT, water protection, and projectile slab"
+direction: "west"
+
+# Base layer (dy=0)
+base:
+  # South wall (dz=-1)
+  - { dx: 0, dy: 0, dz: -1, block: "obsidian" }
+  - { dx: -1, dy: 0, dz: -1, block: "obsidian" }
+  - { dx: -2, dy: 0, dz: -1, block: "obsidian" }
+  - { dx: -3, dy: 0, dz: -1, block: "obsidian" }
+  - { dx: -4, dy: 0, dz: -1, block: "obsidian" }
+  - { dx: -5, dy: 0, dz: -1, block: "obsidian" }
+  - { dx: -6, dy: 0, dz: -1, block: "obsidian" }
+
+  # North wall (dz=+1)
+  - { dx: 0, dy: 0, dz: 1, block: "obsidian" }
+  - { dx: -1, dy: 0, dz: 1, block: "obsidian" }
+  - { dx: -2, dy: 0, dz: 1, block: "obsidian" }
+  - { dx: -3, dy: 0, dz: 1, block: "obsidian" }
+  - { dx: -4, dy: 0, dz: 1, block: "obsidian" }
+  - { dx: -5, dy: 0, dz: 1, block: "obsidian" }
+  - { dx: -6, dy: 0, dz: 1, block: "obsidian" }
+
+  # Back wall (dz=0)
+  - { dx: 0, dy: 0, dz: 0, block: "obsidian" }
+
+  # Water source
+  - { dx: -1, dy: 0, dz: 0, block: "water" }
+
+  # Charge TNT (4 blocks, placed front-to-back so water doesn't wash them)
+  - { dx: -5, dy: 0, dz: 0, block: "tnt" }
+  - { dx: -4, dy: 0, dz: 0, block: "tnt" }
+  - { dx: -3, dy: 0, dz: 0, block: "tnt" }
+  - { dx: -2, dy: 0, dz: 0, block: "tnt" }
+
+  # Projectile slab + obsidian support for redstone
+  - { dx: -7, dy: 0, dz: 0, block: "stone_slab[type=bottom]" }
+  - { dx: -7, dy: 0, dz: 1, block: "obsidian" }
+
+# Top layer (dy=1)
+top:
+  # South side - 6 redstone wire (dz=-1)
+  - { dx: -1, dy: 1, dz: -1, block: "redstone_wire" }
+  - { dx: -2, dy: 1, dz: -1, block: "redstone_wire" }
+  - { dx: -3, dy: 1, dz: -1, block: "redstone_wire" }
+  - { dx: -4, dy: 1, dz: -1, block: "redstone_wire" }
+  - { dx: -5, dy: 1, dz: -1, block: "redstone_wire" }
+  - { dx: 0, dy: 1, dz: -1, block: "redstone_wire" }
+
+  # Button on floor (dz=0)
+  - { dx: 0, dy: 1, dz: 0, block: "oak_button[face=floor]" }
+
+  # North side (dz=+1): 2 redstone wire at back + 4 repeaters facing east + obsidian support
+  - { dx: 0, dy: 1, dz: 1, block: "redstone_wire" }
+  - { dx: -1, dy: 1, dz: 1, block: "redstone_wire" }
+  - { dx: -2, dy: 1, dz: 1, block: "repeater[facing=east,delay=4]" }
+  - { dx: -3, dy: 1, dz: 1, block: "repeater[facing=east,delay=4]" }
+  - { dx: -4, dy: 1, dz: 1, block: "repeater[facing=east,delay=4]" }
+  - { dx: -5, dy: 1, dz: 1, block: "repeater[facing=east,delay=4]" }
+  - { dx: -6, dy: 1, dz: 1, block: "redstone_wire" }
+
+  # Obsidian support block + redstone connecting to projectile
+  - { dx: -7, dy: 1, dz: 1, block: "obsidian" }
+
+  # Projectile TNT on slab
+  - { dx: -7, dy: 1, dz: 0, block: "tnt" }

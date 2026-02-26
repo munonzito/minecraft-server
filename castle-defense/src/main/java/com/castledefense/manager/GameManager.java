@@ -251,6 +251,7 @@ public class GameManager {
                 cancelRespawnTask(uuid);
                 player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).setBaseValue(20.0);
                 player.setHealth(20.0);
+                player.setGameMode(GameMode.SURVIVAL);
             }
         }
 
@@ -294,6 +295,12 @@ public class GameManager {
 
     private void cleanup() {
         removeHorses();
+        for (UUID uuid : gamePlayers) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                player.setGameMode(GameMode.SURVIVAL);
+            }
+        }
         playerTeams.clear();
         gamePlayers.clear();
         respawnTasks.values().forEach(BukkitTask::cancel);

@@ -2,6 +2,7 @@ package com.castledefense.command;
 
 import com.castledefense.CastleDefensePlugin;
 import com.castledefense.manager.ArenaManager;
+import com.castledefense.manager.BlueprintManager;
 import com.castledefense.manager.CastleBuilder;
 import com.castledefense.manager.GameManager;
 import com.castledefense.manager.KitManager;
@@ -29,15 +30,17 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     private final ArenaManager arenaManager;
     private final KitManager kitManager;
     private final CastleBuilder castleBuilder;
+    private final BlueprintManager blueprintManager;
 
     public CommandHandler(CastleDefensePlugin plugin, GameManager gameManager,
                           ArenaManager arenaManager, KitManager kitManager,
-                          CastleBuilder castleBuilder) {
+                          CastleBuilder castleBuilder, BlueprintManager blueprintManager) {
         this.plugin = plugin;
         this.gameManager = gameManager;
         this.arenaManager = arenaManager;
         this.kitManager = kitManager;
         this.castleBuilder = castleBuilder;
+        this.blueprintManager = blueprintManager;
     }
 
     @Override
@@ -61,6 +64,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             case "setspawn" -> handleSetSpawn(player, args);
             case "settarget" -> handleSetTarget(player);
             case "build" -> handleBuild(player);
+            case "cannon" -> handleCannon(player);
             case "status" -> handleStatus(player);
             default -> sendHelp(player);
         }
@@ -193,6 +197,31 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         msg(player, "§aTarget block location set! An §6Orange Banner §awill be placed here when the game starts.");
     }
 
+    private void handleCannon(Player player) {
+        if (!player.hasPermission("castledefense.admin")) {
+            msg(player, "§cYou don't have permission to do this.");
+            return;
+        }
+
+        String facing = getPlayerFacing(player);
+        msg(player, "§ePlacing TNT cannon facing §b" + facing + "§e...");
+
+        if (blueprintManager.placeBlueprint("tnt_cannon", player.getLocation(), facing)) {
+            msg(player, "§aTNT cannon placed! Press the button to fire.");
+        } else {
+            msg(player, "§cFailed to place cannon blueprint.");
+        }
+    }
+
+    private String getPlayerFacing(Player player) {
+        float yaw = player.getLocation().getYaw() % 360;
+        if (yaw < 0) yaw += 360;
+        if (yaw >= 315 || yaw < 45) return "south";
+        if (yaw >= 45 && yaw < 135) return "west";
+        if (yaw >= 135 && yaw < 225) return "north";
+        return "east";
+    }
+
     private void handleBuild(Player player) {
         if (!player.hasPermission("castledefense.admin")) {
             msg(player, "§cYou don't have permission to do this.");
@@ -243,6 +272,8 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                 .append(Component.text(" - View game status", NamedTextColor.GRAY)));
 
         if (player.hasPermission("castledefense.admin")) {
+            player.sendMessage(Component.text("/castle cannon", NamedTextColor.GREEN)
+                    .append(Component.text(" - Place a TNT cannon", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle build", NamedTextColor.GREEN)
                     .append(Component.text(" - Build a castle at your location", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle start", NamedTextColor.GREEN)
@@ -274,7 +305,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> subs = new ArrayList<>(Arrays.asList("join", "kit", "status"));
             if (sender.hasPermission("castledefense.admin")) {
-                subs.addAll(Arrays.asList("build", "start", "stop", "setspawn", "settarget"));
+                subs.addAll(Arrays.asList("build", "cannon", "start", "stop", "setspawn", "settarget"));
             }
             completions = subs.stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
