@@ -1,0 +1,50 @@
+game:
+  countdown-seconds: 15
+  wave-break-seconds: 15
+  respawn-delay-seconds: 10
+  base-mobs-per-wave: 8
+  mobs-increase-per-wave: 5
+  health-scale-per-wave: 1.10
+  mob-spawn-distance: 30
+  villager-max-health: 40
+  coins-per-kill: 1
+  coins-per-special-kill: 3
+
+shop:
+  cooked-beef-8:
+    cost: 2
+  golden-apple-2:
+    cost: 5
+  splash-healing:
+    cost: 3
+  arrow-16:
+    cost: 2
+  diamond-sword:
+    cost: 10
+  iron-armor:
+    cost: 15
+  diamond-armor:
+    cost: 30
+  shield:
+    cost: 5
+  splash-harming:
+    cost: 4
+  splash-poison:
+    cost: 4
+  power-bow:
+    cost: 8
+  iron-golem:
+    cost: 20
+
+messages:
+  prefix: "&6[CastleSiege] &r"
+  game-starting: "&eThe siege begins in &b%seconds% &eseconds! Choose your kit!"
+  wave-starting: "&c&lWave %wave% &estarting! &b%mobs% mobs &eincoming!"
+  wave-complete: "&aWave %wave% complete! Shop is open for &b%seconds%s&a!"
+  game-over: "&c&lGAME OVER! &eThe villager has fallen! You survived &b%waves% &ewaves!"
+  game-stopped: "&eThe siege has been stopped by an admin."
+  villager-hit: "&c&lThe villager is under attack! &eHealth: &c%health%/%max%"
+  player-kill: "&a+%coins% coins! &7(%total% total)"
+  kit-selected: "&aYou selected the &b%kit% &akit!"
+  not-enough-coins: "&cNot enough coins! You need &b%cost% &ccoins."
+  item-purchased: "&aPurchased &b%item% &afor &e%cost% coins&a! (&e%remaining% &aremaining)"

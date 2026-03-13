@@ -1,0 +1,28 @@
+package com.castlesiege.model;
+
+public enum SiegeKit {
+    KNIGHT("Knight", "§6"),
+    ARCHER("Archer", "§a"),
+    MAGICIAN("Magician", "§d"),
+    TANK("Tank", "§7");
+
+    private final String displayName;
+    private final String color;
+
+    SiegeKit(String displayName, String color) {
+        this.displayName = displayName;
+        this.color = color;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getColoredName() {
+        return color + displayName;
+    }
+}

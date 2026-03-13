@@ -1,15 +1,19 @@
 package com.castledefense.model;
 
+import org.bukkit.Material;
+
 public enum Team {
-    ATTACKERS("Attackers", "§c"),
-    DEFENDERS("Defenders", "§9");
+    RED("Red", "§c", Material.RED_BANNER),
+    BLUE("Blue", "§9", Material.BLUE_BANNER);
 
     private final String displayName;
     private final String color;
+    private final Material bannerMaterial;
 
-    Team(String displayName, String color) {
+    Team(String displayName, String color, Material bannerMaterial) {
         this.displayName = displayName;
         this.color = color;
+        this.bannerMaterial = bannerMaterial;
     }
 
     public String getDisplayName() {
@@ -22,5 +26,13 @@ public enum Team {
 
     public String getColoredName() {
         return color + displayName;
+    }
+
+    public Material getBannerMaterial() {
+        return bannerMaterial;
+    }
+
+    public Team getOpposite() {
+        return this == RED ? BLUE : RED;
     }
 }

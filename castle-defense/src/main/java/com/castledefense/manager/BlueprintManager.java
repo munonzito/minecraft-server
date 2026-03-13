@@ -130,14 +130,33 @@ public class BlueprintManager {
     private String rotateBlock(String block, String facing) {
         if (!block.contains("facing=")) return block;
 
-        return switch (facing) {
-            case "east" -> block.replace("facing=east", "facing=west")
-                               .replace("facing=west", "facing=east");
-            case "north" -> block.replace("facing=east", "facing=south")
-                                .replace("facing=west", "facing=north");
-            case "south" -> block.replace("facing=east", "facing=north")
-                                .replace("facing=west", "facing=south");
-            default -> block;
+        // Extract current facing value
+        String currentFacing = null;
+        for (String dir : new String[]{"east", "west", "north", "south"}) {
+            if (block.contains("facing=" + dir)) {
+                currentFacing = dir;
+                break;
+            }
+        }
+        if (currentFacing == null) return block;
+
+        // Blueprint is authored for west-facing cannon
+        // Rotate the facing direction based on target direction
+        // west = 0, north = 90 CW, east = 180, south = 270 CW
+        String[] dirs = {"west", "north", "east", "south"};
+        int rotations = switch (facing) {
+            case "north" -> 1;
+            case "east" -> 2;
+            case "south" -> 3;
+            default -> 0; // west, no rotation
         };
+
+        int idx = 0;
+        for (int i = 0; i < dirs.length; i++) {
+            if (dirs[i].equals(currentFacing)) { idx = i; break; }
+        }
+        String newFacing = dirs[(idx + rotations) % 4];
+
+        return block.replace("facing=" + currentFacing, "facing=" + newFacing);
     }
 }

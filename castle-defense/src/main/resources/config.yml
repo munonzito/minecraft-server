@@ -6,29 +6,32 @@ game:
 
 arena:
   world: "world"
-  attackers-spawn:
+  red-spawn:
     x: 0.0
     y: 64.0
     z: 0.0
-    yaw: 0.0
+    yaw: 90.0
     pitch: 0.0
-  defenders-spawn:
+  blue-spawn:
     x: 0.0
     y: 64.0
     z: 0.0
-    yaw: 0.0
+    yaw: 270.0
     pitch: 0.0
-  target-block:
+  red-target:
     x: 0
     y: 64
     z: 0
-    material: "ORANGE_BANNER"
+  blue-target:
+    x: 0
+    y: 64
+    z: 0
 
 messages:
   prefix: "&6[CastleDefense] &r"
-  game-started: "&aThe battle has begun! Attackers, destroy the castle banner!"
-  game-ended-attackers-win: "&cThe attackers have conquered the castle!"
-  game-ended-defenders-win: "&aThe defenders held the castle! Victory!"
+  game-started: "&aThe battle has begun! Destroy the enemy banner to win!"
+  game-ended-win: "&6%team% &ateam has conquered the enemy castle! Victory!"
+  game-ended-draw: "&eTime ran out! The battle ends in a draw!"
   game-stopped: "&eThe game has been stopped by an admin."
   player-joined: "&e%player% has joined the battle!"
   team-assigned: "&eYou have been assigned to the &b%team% &eteam!"

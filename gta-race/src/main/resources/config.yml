@@ -1,0 +1,46 @@
+race:
+  laps: 3
+  max-players: 8
+  min-players: 1
+  countdown-seconds: 5
+  respawn-delay-seconds: 3
+  vehicle-speed-multiplier: 1.8
+  car-max-health: 100
+  powerup-respawn-seconds: 10
+
+track:
+  world: world
+  start:
+    x: 0.0
+    y: 65.0
+    z: 0.0
+    yaw: 0.0
+    pitch: 0.0
+  checkpoints: []
+  finish:
+    x: 0.0
+    y: 65.0
+    z: 0.0
+  checkpoint-radius: 12.0
+  finish-radius: 12.0
+  powerup-spawns: []
+
+messages:
+  prefix: '&6[GTARace] &r'
+  race-started: '&a&lGO GO GO!'
+  race-countdown: '&eRace starting in &b%seconds% &eseconds!'
+  player-joined: '&e%player% has joined the race!'
+  player-left: '&e%player% has left the race.'
+  race-finished: '&6%player% &efinished in &b%position%%suffix% &eplace!'
+  race-ended: '&6Race over! &e%player% wins!'
+  race-stopped: '&eThe race has been stopped by an admin.'
+  checkpoint-reached: '&aCheckpoint %number%/%total%!'
+  lap-completed: '&6Lap %lap%/%total% completed!'
+  not-enough-players: '&cNeed at least %min% players to start!'
+  race-already-running: '&cA race is already in progress!'
+  no-race-running: '&cNo race is currently running!'
+  powerup-speed: '&b&lSPEED BOOST!'
+  powerup-shield: '&9&lSHIELD ACTIVE!'
+  powerup-missile: '&c&lMISSILE ACQUIRED!'
+  powerup-oil: '&8&lOIL SLICK DROPPED!'
+  car-destroyed: '&c&lCAR DESTROYED! &eRespawning...'

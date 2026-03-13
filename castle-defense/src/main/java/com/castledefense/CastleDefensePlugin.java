@@ -26,6 +26,7 @@ public class CastleDefensePlugin extends JavaPlugin {
         gameManager = new GameManager(this, arenaManager, kitManager);
         castleBuilder = new CastleBuilder(this, arenaManager);
         blueprintManager = new BlueprintManager(this);
+        castleBuilder.setBlueprintManager(blueprintManager);
 
         getServer().getPluginManager().registerEvents(new GameListener(this, gameManager, arenaManager), this);
 

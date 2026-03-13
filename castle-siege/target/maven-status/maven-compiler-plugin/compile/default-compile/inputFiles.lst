@@ -1,0 +1,10 @@
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/CastleSiegePlugin.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/command/CommandHandler.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/listener/GameListener.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/manager/CastleManager.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/manager/GameManager.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/manager/KitManager.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/manager/ShopManager.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/manager/WaveManager.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/model/GameState.java
+/Users/martinmunoz/projects/minecraft_server/castle-siege/src/main/java/com/castlesiege/model/SiegeKit.java

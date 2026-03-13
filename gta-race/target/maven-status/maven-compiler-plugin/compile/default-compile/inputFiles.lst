@@ -1,0 +1,11 @@
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/GTARacePlugin.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/command/CommandHandler.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/listener/RaceListener.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/manager/PowerUpManager.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/manager/RaceManager.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/manager/TrackBuilder.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/manager/TrackManager.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/manager/VehicleManager.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/model/Checkpoint.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/model/PowerUpType.java
+/Users/martinmunoz/projects/minecraft_server/gta-race/src/main/java/com/gtarace/model/RaceState.java

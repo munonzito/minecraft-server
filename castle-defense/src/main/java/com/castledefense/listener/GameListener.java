@@ -36,11 +36,12 @@ public class GameListener implements Listener {
         Player player = event.getPlayer();
         if (!gameManager.isPlayerInGame(player.getUniqueId())) return;
 
-        if (arenaManager.isTargetBlock(event.getBlock().getLocation())) {
-            Team team = gameManager.getPlayerTeam(player.getUniqueId());
-            if (team == Team.ATTACKERS) {
+        Team bannerTeam = arenaManager.getTargetBlockTeam(event.getBlock().getLocation());
+        if (bannerTeam != null) {
+            Team playerTeam = gameManager.getPlayerTeam(player.getUniqueId());
+            if (playerTeam != bannerTeam) {
                 event.setDropItems(false);
-                gameManager.onTargetBlockBroken(player);
+                gameManager.onTargetBlockBroken(player, bannerTeam);
             } else {
                 event.setCancelled(true);
                 player.sendMessage(Component.text(plugin.getMessagePrefix() + "§cYou can't break your own banner!"));

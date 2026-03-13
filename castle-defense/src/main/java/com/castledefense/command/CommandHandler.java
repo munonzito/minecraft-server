@@ -62,7 +62,6 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             case "start" -> handleStart(player);
             case "stop" -> handleStop(player);
             case "setspawn" -> handleSetSpawn(player, args);
-            case "settarget" -> handleSetTarget(player);
             case "build" -> handleBuild(player);
             case "cannon" -> handleCannon(player);
             case "status" -> handleStatus(player);
@@ -169,32 +168,22 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 2) {
-            msg(player, "§7Usage: §b/castle setspawn <attackers|defenders>");
+            msg(player, "§7Usage: §b/castle setspawn <red|blue>");
             return;
         }
 
         Team team;
         switch (args[1].toLowerCase()) {
-            case "attackers", "attack", "a" -> team = Team.ATTACKERS;
-            case "defenders", "defend", "d" -> team = Team.DEFENDERS;
+            case "red", "r" -> team = Team.RED;
+            case "blue", "b" -> team = Team.BLUE;
             default -> {
-                msg(player, "§cInvalid team! Use: attackers or defenders");
+                msg(player, "§cInvalid team! Use: red or blue");
                 return;
             }
         }
 
         arenaManager.setSpawn(team, player.getLocation());
         msg(player, "§a" + team.getDisplayName() + " spawn set to your current location!");
-    }
-
-    private void handleSetTarget(Player player) {
-        if (!player.hasPermission("castledefense.admin")) {
-            msg(player, "§cYou don't have permission to do this.");
-            return;
-        }
-
-        arenaManager.setTargetBlock(player.getLocation());
-        msg(player, "§aTarget block location set! An §6Orange Banner §awill be placed here when the game starts.");
     }
 
     private void handleCannon(Player player) {
@@ -229,15 +218,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         }
 
         if (gameManager.isGameActive()) {
-            msg(player, "§cCan't build a castle while a game is running!");
+            msg(player, "§cCan't build while a game is running!");
             return;
         }
 
-        msg(player, "§eBuilding castle at your location... This may take a moment.");
-        castleBuilder.buildCastle(player.getLocation());
-        msg(player, "§aCastle built! Spawns and target banner have been set automatically.");
-        msg(player, "§7Attackers spawn outside the gate. Defenders spawn in the courtyard.");
-        msg(player, "§7The target §6Orange Banner §7is inside the throne room.");
+        msg(player, "§eBuilding two castles at your location... This may take a moment.");
+        castleBuilder.buildArena(player.getLocation());
+        msg(player, "§aArena built! Two castles face each other with banners inside each throne room.");
+        msg(player, "§c Red castle §7has a §cRed Banner§7. §9Blue castle §7has a §9Blue Banner§7.");
+        msg(player, "§7Destroy the enemy banner to win!");
     }
 
     private void handleStatus(Player player) {
@@ -247,8 +236,8 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         player.sendMessage(Component.text("Players: " + gameManager.getPlayerCount(), NamedTextColor.YELLOW));
 
         if (state == GameState.ACTIVE) {
-            player.sendMessage(Component.text("Attackers: " + gameManager.getTeamCount(Team.ATTACKERS), NamedTextColor.RED));
-            player.sendMessage(Component.text("Defenders: " + gameManager.getTeamCount(Team.DEFENDERS), NamedTextColor.BLUE));
+            player.sendMessage(Component.text("Red: " + gameManager.getTeamCount(Team.RED), NamedTextColor.RED));
+            player.sendMessage(Component.text("Blue: " + gameManager.getTeamCount(Team.BLUE), NamedTextColor.BLUE));
             player.sendMessage(Component.text("Time remaining: " + formatTime(gameManager.getTimeRemaining()), NamedTextColor.AQUA));
         }
 
@@ -275,15 +264,13 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             player.sendMessage(Component.text("/castle cannon", NamedTextColor.GREEN)
                     .append(Component.text(" - Place a TNT cannon", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle build", NamedTextColor.GREEN)
-                    .append(Component.text(" - Build a castle at your location", NamedTextColor.GRAY)));
+                    .append(Component.text(" - Build the two-castle arena", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle start", NamedTextColor.GREEN)
                     .append(Component.text(" - Start the game", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle stop", NamedTextColor.GREEN)
                     .append(Component.text(" - Stop the game", NamedTextColor.GRAY)));
             player.sendMessage(Component.text("/castle setspawn <team>", NamedTextColor.GREEN)
-                    .append(Component.text(" - Set team spawn point", NamedTextColor.GRAY)));
-            player.sendMessage(Component.text("/castle settarget", NamedTextColor.GREEN)
-                    .append(Component.text(" - Set target block location", NamedTextColor.GRAY)));
+                    .append(Component.text(" - Set team spawn (red/blue)", NamedTextColor.GRAY)));
         }
     }
 
@@ -305,7 +292,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> subs = new ArrayList<>(Arrays.asList("join", "kit", "status"));
             if (sender.hasPermission("castledefense.admin")) {
-                subs.addAll(Arrays.asList("build", "cannon", "start", "stop", "setspawn", "settarget"));
+                subs.addAll(Arrays.asList("build", "cannon", "start", "stop", "setspawn"));
             }
             completions = subs.stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
@@ -317,7 +304,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                         .filter(s -> s.startsWith(args[1].toLowerCase()))
                         .collect(Collectors.toList());
             } else if (args[0].equalsIgnoreCase("setspawn")) {
-                completions = List.of("attackers", "defenders").stream()
+                completions = List.of("red", "blue").stream()
                         .filter(s -> s.startsWith(args[1].toLowerCase()))
                         .collect(Collectors.toList());
             }

@@ -104,7 +104,7 @@ public class GameManager {
     private void beginGame() {
         state = GameState.ACTIVE;
         assignTeams();
-        arenaManager.placeTargetBlock();
+        arenaManager.placeTargetBlocks();
 
         timeRemaining = plugin.getConfig().getInt("game.duration-seconds", 600);
 
@@ -119,6 +119,7 @@ public class GameManager {
             kitManager.applyKit(player, kit, team);
             player.teleport(arenaManager.getSpawn(team));
 
+            NamedTextColor teamColor = team == Team.RED ? NamedTextColor.RED : NamedTextColor.BLUE;
             player.showTitle(Title.title(
                     Component.text("BATTLE!", NamedTextColor.RED, TextDecoration.BOLD),
                     Component.text("You are " + team.getColoredName(), NamedTextColor.WHITE),
@@ -138,7 +139,7 @@ public class GameManager {
 
         int half = shuffled.size() / 2;
         for (int i = 0; i < shuffled.size(); i++) {
-            Team team = i < half ? Team.ATTACKERS : Team.DEFENDERS;
+            Team team = i < half ? Team.RED : Team.BLUE;
             playerTeams.put(shuffled.get(i), team);
         }
     }
@@ -148,7 +149,7 @@ public class GameManager {
             @Override
             public void run() {
                 if (timeRemaining <= 0) {
-                    endGame(Team.DEFENDERS);
+                    endGame(null);
                     cancel();
                     return;
                 }
@@ -174,13 +175,14 @@ public class GameManager {
         }.runTaskTimer(plugin, 0L, 20L);
     }
 
-    public void onTargetBlockBroken(Player breaker) {
+    public void onTargetBlockBroken(Player breaker, Team bannerTeam) {
         if (state != GameState.ACTIVE) return;
 
         Team breakerTeam = playerTeams.get(breaker.getUniqueId());
-        if (breakerTeam == Team.ATTACKERS) {
-            broadcastToPlayers(plugin.getMessagePrefix() + "§c§l" + breaker.getName() + " §ehas destroyed the castle banner!");
-            endGame(Team.ATTACKERS);
+        if (breakerTeam != bannerTeam) {
+            broadcastToPlayers(plugin.getMessagePrefix() + "§c§l" + breaker.getName()
+                    + " §ehas destroyed the " + bannerTeam.getColoredName() + " §ebanner!");
+            endGame(breakerTeam);
         } else {
             breaker.sendMessage(Component.text(plugin.getMessagePrefix() + "§cYou cannot break your own castle's banner!"));
         }
@@ -195,9 +197,14 @@ public class GameManager {
             gameTimerTask = null;
         }
 
-        String winMessage = winner == Team.ATTACKERS
-                ? plugin.getMessage("game-ended-attackers-win")
-                : plugin.getMessage("game-ended-defenders-win");
+        boolean draw = winner == null;
+        String winMessage;
+        if (draw) {
+            winMessage = plugin.getMessage("game-ended-draw");
+        } else {
+            winMessage = plugin.getMessage("game-ended-win")
+                    .replace("%team%", winner.getColoredName());
+        }
 
         for (UUID uuid : gamePlayers) {
             Player player = Bukkit.getPlayer(uuid);
@@ -206,19 +213,27 @@ public class GameManager {
             cancelRespawnTask(uuid);
 
             Team team = playerTeams.get(uuid);
-            boolean won = team == winner;
+            boolean won = !draw && team == winner;
 
-            player.showTitle(Title.title(
-                    Component.text(won ? "VICTORY!" : "DEFEAT!", won ? NamedTextColor.GOLD : NamedTextColor.RED, TextDecoration.BOLD),
-                    Component.text(winner.getDisplayName() + " win!", NamedTextColor.WHITE),
-                    Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofSeconds(1))
-            ));
+            if (draw) {
+                player.showTitle(Title.title(
+                        Component.text("DRAW!", NamedTextColor.YELLOW, TextDecoration.BOLD),
+                        Component.text("Time ran out!", NamedTextColor.WHITE),
+                        Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofSeconds(1))
+                ));
+                player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 1.0f, 1.0f);
+            } else {
+                player.showTitle(Title.title(
+                        Component.text(won ? "VICTORY!" : "DEFEAT!", won ? NamedTextColor.GOLD : NamedTextColor.RED, TextDecoration.BOLD),
+                        Component.text(winner.getDisplayName() + " team wins!", NamedTextColor.WHITE),
+                        Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofSeconds(1))
+                ));
+                player.playSound(player.getLocation(),
+                        won ? Sound.UI_TOAST_CHALLENGE_COMPLETE : Sound.ENTITY_WITHER_DEATH,
+                        1.0f, 1.0f);
+            }
 
-            player.playSound(player.getLocation(),
-                    won ? Sound.UI_TOAST_CHALLENGE_COMPLETE : Sound.ENTITY_WITHER_DEATH,
-                    1.0f, 1.0f);
-
-            player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).setBaseValue(20.0);
+            player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20.0);
             player.setHealth(20.0);
             player.setGameMode(GameMode.SPECTATOR);
         }
@@ -249,7 +264,7 @@ public class GameManager {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
                 cancelRespawnTask(uuid);
-                player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).setBaseValue(20.0);
+                player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20.0);
                 player.setHealth(20.0);
                 player.setGameMode(GameMode.SURVIVAL);
             }
@@ -264,7 +279,7 @@ public class GameManager {
             Location stable = arenaManager.getStable(team);
             if (stable == null) continue;
 
-            Horse.Color color = team == Team.ATTACKERS ? Horse.Color.DARK_BROWN : Horse.Color.WHITE;
+            Horse.Color color = team == Team.RED ? Horse.Color.DARK_BROWN : Horse.Color.WHITE;
 
             for (int i = 0; i < HORSES_PER_TEAM; i++) {
                 Location spawnLoc = stable.clone().add(i * 2 - 2, 0, 0);
@@ -367,13 +382,13 @@ public class GameManager {
         playerTeams.remove(uuid);
 
         if (state == GameState.ACTIVE) {
-            long attackers = countTeamPlayers(Team.ATTACKERS);
-            long defenders = countTeamPlayers(Team.DEFENDERS);
+            long red = countTeamPlayers(Team.RED);
+            long blue = countTeamPlayers(Team.BLUE);
 
-            if (attackers == 0) {
-                endGame(Team.DEFENDERS);
-            } else if (defenders == 0) {
-                endGame(Team.ATTACKERS);
+            if (red == 0) {
+                endGame(Team.BLUE);
+            } else if (blue == 0) {
+                endGame(Team.RED);
             }
         }
     }

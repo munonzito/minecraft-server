@@ -8,15 +8,15 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class ArenaManager {
 
     private final CastleDefensePlugin plugin;
-    private Location attackersSpawn;
-    private Location defendersSpawn;
-    private Location targetBlockLocation;
-    private Material targetBlockMaterial;
-    private Location attackersStable;
-    private Location defendersStable;
+    private final Map<Team, Location> spawns = new EnumMap<>(Team.class);
+    private final Map<Team, Location> stables = new EnumMap<>(Team.class);
+    private final Map<Team, Location> targetBlocks = new EnumMap<>(Team.class);
 
     public ArenaManager(CastleDefensePlugin plugin) {
         this.plugin = plugin;
@@ -33,104 +33,87 @@ public class ArenaManager {
             world = Bukkit.getWorlds().get(0);
         }
 
-        attackersSpawn = new Location(
-                world,
-                config.getDouble("arena.attackers-spawn.x"),
-                config.getDouble("arena.attackers-spawn.y"),
-                config.getDouble("arena.attackers-spawn.z"),
-                (float) config.getDouble("arena.attackers-spawn.yaw"),
-                (float) config.getDouble("arena.attackers-spawn.pitch")
-        );
+        for (Team team : Team.values()) {
+            String key = team.name().toLowerCase();
 
-        defendersSpawn = new Location(
-                world,
-                config.getDouble("arena.defenders-spawn.x"),
-                config.getDouble("arena.defenders-spawn.y"),
-                config.getDouble("arena.defenders-spawn.z"),
-                (float) config.getDouble("arena.defenders-spawn.yaw"),
-                (float) config.getDouble("arena.defenders-spawn.pitch")
-        );
+            spawns.put(team, new Location(
+                    world,
+                    config.getDouble("arena." + key + "-spawn.x"),
+                    config.getDouble("arena." + key + "-spawn.y"),
+                    config.getDouble("arena." + key + "-spawn.z"),
+                    (float) config.getDouble("arena." + key + "-spawn.yaw"),
+                    (float) config.getDouble("arena." + key + "-spawn.pitch")
+            ));
 
-        targetBlockLocation = new Location(
-                world,
-                config.getInt("arena.target-block.x"),
-                config.getInt("arena.target-block.y"),
-                config.getInt("arena.target-block.z")
-        );
-
-        String materialName = config.getString("arena.target-block.material", "ORANGE_BANNER");
-        try {
-            targetBlockMaterial = Material.valueOf(materialName);
-        } catch (IllegalArgumentException e) {
-            plugin.getLogger().warning("Invalid target block material: " + materialName + ". Using ORANGE_BANNER.");
-            targetBlockMaterial = Material.ORANGE_BANNER;
+            targetBlocks.put(team, new Location(
+                    world,
+                    config.getInt("arena." + key + "-target.x"),
+                    config.getInt("arena." + key + "-target.y"),
+                    config.getInt("arena." + key + "-target.z")
+            ));
         }
     }
 
     public void setSpawn(Team team, Location location) {
-        String path = team == Team.ATTACKERS ? "arena.attackers-spawn" : "arena.defenders-spawn";
+        String key = team.name().toLowerCase();
+        String path = "arena." + key + "-spawn";
         plugin.getConfig().set(path + ".x", location.getX());
         plugin.getConfig().set(path + ".y", location.getY());
         plugin.getConfig().set(path + ".z", location.getZ());
         plugin.getConfig().set(path + ".yaw", location.getYaw());
         plugin.getConfig().set(path + ".pitch", location.getPitch());
         plugin.saveConfig();
-
-        if (team == Team.ATTACKERS) {
-            attackersSpawn = location;
-        } else {
-            defendersSpawn = location;
-        }
+        spawns.put(team, location);
     }
 
-    public void setTargetBlock(Location location) {
-        plugin.getConfig().set("arena.target-block.x", location.getBlockX());
-        plugin.getConfig().set("arena.target-block.y", location.getBlockY());
-        plugin.getConfig().set("arena.target-block.z", location.getBlockZ());
+    public void setTargetBlock(Team team, Location location) {
+        String key = team.name().toLowerCase();
+        String path = "arena." + key + "-target";
+        plugin.getConfig().set(path + ".x", location.getBlockX());
+        plugin.getConfig().set(path + ".y", location.getBlockY());
+        plugin.getConfig().set(path + ".z", location.getBlockZ());
         plugin.saveConfig();
-        targetBlockLocation = location;
+        targetBlocks.put(team, location);
     }
 
-    public void placeTargetBlock() {
-        if (targetBlockLocation != null && targetBlockMaterial != null) {
-            targetBlockLocation.getBlock().setType(targetBlockMaterial);
+    public void placeTargetBlocks() {
+        for (Team team : Team.values()) {
+            Location loc = targetBlocks.get(team);
+            if (loc != null) {
+                loc.getBlock().setType(team.getBannerMaterial());
+            }
         }
     }
 
-    public boolean isTargetBlock(Location location) {
-        if (targetBlockLocation == null) return false;
-        return location.getBlockX() == targetBlockLocation.getBlockX()
-                && location.getBlockY() == targetBlockLocation.getBlockY()
-                && location.getBlockZ() == targetBlockLocation.getBlockZ();
+    public Team getTargetBlockTeam(Location location) {
+        for (Team team : Team.values()) {
+            Location target = targetBlocks.get(team);
+            if (target != null
+                    && location.getBlockX() == target.getBlockX()
+                    && location.getBlockY() == target.getBlockY()
+                    && location.getBlockZ() == target.getBlockZ()) {
+                return team;
+            }
+        }
+        return null;
     }
 
     public Location getSpawn(Team team) {
-        return team == Team.ATTACKERS ? attackersSpawn.clone() : defendersSpawn.clone();
+        Location loc = spawns.get(team);
+        return loc != null ? loc.clone() : null;
     }
 
     public void setStable(Team team, Location location) {
-        String path = team == Team.ATTACKERS ? "arena.attackers-stable" : "arena.defenders-stable";
+        String key = team.name().toLowerCase();
+        String path = "arena." + key + "-stable";
         plugin.getConfig().set(path + ".x", location.getX());
         plugin.getConfig().set(path + ".y", location.getY());
         plugin.getConfig().set(path + ".z", location.getZ());
         plugin.saveConfig();
-
-        if (team == Team.ATTACKERS) {
-            attackersStable = location;
-        } else {
-            defendersStable = location;
-        }
+        stables.put(team, location);
     }
 
     public Location getStable(Team team) {
-        return team == Team.ATTACKERS ? attackersStable : defendersStable;
-    }
-
-    public Location getTargetBlockLocation() {
-        return targetBlockLocation;
-    }
-
-    public Material getTargetBlockMaterial() {
-        return targetBlockMaterial;
+        return stables.get(team);
     }
 }

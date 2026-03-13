@@ -49,7 +49,7 @@ public class KitManager {
         player.getInventory().addItem(new ItemStack(Material.STONE_SWORD));
         player.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 8));
 
-        Color armorColor = team == Team.ATTACKERS ? Color.RED : Color.BLUE;
+        Color armorColor = team == Team.RED ? Color.RED : Color.BLUE;
 
         ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
         LeatherArmorMeta helmetMeta = (LeatherArmorMeta) helmet.getItemMeta();

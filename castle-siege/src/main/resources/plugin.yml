@@ -1,0 +1,17 @@
+name: CastleSiege
+version: '${project.version}'
+main: com.castlesiege.CastleSiegePlugin
+api-version: '1.21'
+description: Castle Siege wave defense minigame
+authors: [martinmunoz]
+
+commands:
+  siege:
+    description: Castle Siege game commands
+    usage: /<command> [stop]
+    aliases: [cs]
+
+permissions:
+  castlesiege.admin:
+    description: Allows starting and stopping siege games
+    default: op
